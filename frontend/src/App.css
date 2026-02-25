@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  place-items: initial;
+  min-width: auto;
+  min-height: 100vh;
+}
+
+#root {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}

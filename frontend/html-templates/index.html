@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry Department - IIT Madras (Site Map)</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            background-color: #f4f4f9; 
+            color: #333; 
+        }
+
+        /* Navbar Layout */
+        .navbar { 
+            background: #1a2a3a; 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Navbar Links */
+        .navbar > a, .dropbtn { 
+            display: inline-block;
+            color: #fff; 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 15px; 
+            padding: 18px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .navbar > a:hover, .dropdown:hover .dropbtn { 
+            background-color: #f39c12; 
+            color: #fff;
+        }
+
+        /* Dropdown Container */
+        .dropdown { 
+            position: relative; 
+            display: inline-block; 
+        }
+
+        /* Dropdown Content */
+        .dropdown-content { 
+            display: none; 
+            position: absolute; 
+            background-color: #fff; 
+            min-width: 200px; 
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); 
+            z-index: 1; 
+            border-top: 3px solid #f39c12;
+            border-radius: 0 0 5px 5px;
+        }
+
+        /* Dropdown Links */
+        .dropdown-content a { 
+            color: #333; 
+            padding: 12px 16px; 
+            text-decoration: none; 
+            display: block; 
+            text-align: left;
+            font-size: 14px;
+            font-weight: normal;
+            border-bottom: 1px solid #eee;
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-content a:hover { 
+            background-color: #f4f4f9; 
+            color: #e74c3c;
+            padding-left: 20px;
+            transition: 0.3s;
+        }
+
+        /* Hover reveal */
+        .dropdown:hover .dropdown-content { 
+            display: block; 
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-header {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 16px;
+            margin: 0;
+            background: #fafafa;
+            border-bottom: 1px solid #eee;
+            font-weight: bold;
+        }
+
+        /* Main Content */
+        .container {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 { color: #1a2a3a; text-align: center; margin-bottom: 10px; margin-top: 0;}
+        .subtitle { text-align: center; color: #666; margin-bottom: 40px; font-size: 1.1em; }
+        
+        .welcome-box {
+            background: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+            border-top: 4px solid #1a2a3a;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="index.html">Home</a>
+        
+        <div class="dropdown">
+            <button class="dropbtn">About ▾</button>
+            <div class="dropdown-content">
+                <a href="about/overview.html">Overview</a>
+                <a href="about/message-from-head.html">Message From Head</a>
+                <a href="about/vision-mission.html">Vision & Mission</a>
+                <a href="about/achievements.html">Achievements</a>
+                <a href="about/rankings.html">Rankings</a>
+                <a href="about/history.html">History</a>
+                <a href="about/advisory-board.html">Advisory Board</a>
+                <a href="about/committees.html">Committees</a>
+                <a href="about/annual-reports.html">Annual Reports</a>
+                <div class="dropdown-header">IITM Specific</div>
+                <a href="about/industry-partnerships.html">Industry Partnerships</a>
+                <a href="about/research-park-link.html">Research Park Link</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Academics ▾</button>
+            <div class="dropdown-content">
+                <a href="academics/index.html">Academics Overview</a>
+                <div class="dropdown-header">Undergraduate</div>
+                <a href="academics/undergraduate/bs-chemistry.html">BS Chemistry</a>
+                <a href="academics/undergraduate/dual-degree.html">Dual Degree</a>
+                <a href="academics/undergraduate/curriculum.html">Curriculum</a>
+                <a href="academics/undergraduate/course-structure.html">Course Structure</a>
+                <a href="academics/undergraduate/minor-in-chemistry.html">Minor in Chemistry</a>
+                <div class="dropdown-header">Postgraduate</div>
+                <a href="academics/postgraduate/msc.html">MSc Program</a>
+                <a href="academics/postgraduate/phd.html">PhD Program</a>
+                <a href="academics/postgraduate/eligibility.html">Eligibility</a>
+                <a href="academics/postgraduate/handbook.html">Handbook</a>
+                <div class="dropdown-header">Courses</div>
+                <a href="academics/courses/core-courses.html">Core Courses</a>
+                <a href="academics/courses/elective-courses.html">Elective Courses</a>
+                <a href="academics/courses/lab-courses.html">Lab Courses</a>
+                <a href="academics/courses/course-catalog.html">Course Catalog</a>
+                <div class="dropdown-header">Interdisciplinary</div>
+                <a href="academics/interdisciplinary/chemistry-ai.html">Chemistry + AI</a>
+                <a href="academics/interdisciplinary/chemistry-materials.html">Chemistry + Materials</a>
+                <a href="academics/interdisciplinary/chemistry-energy.html">Chemistry + Energy</a>
+                <a href="academics/interdisciplinary/chemistry-bio.html">Chemistry + Bio</a>
+                <div class="dropdown-header">Other</div>
+                <a href="academics/academic-calendar.html">Academic Calendar</a>
+                <a href="academics/timetable.html">Timetable</a>
+                <a href="academics/regulations.html">Regulations</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Research ▾</button>
+            <div class="dropdown-content">
+                <a href="research/index.html">Research Overview</a>
+                <a href="research/publications.html">Publications</a>
+                <a href="research/patents.html">Patents</a>
+                <a href="research/funded-projects.html">Funded Projects</a>
+                <a href="research/research-facilities.html">Research Facilities</a>
+                <a href="research/industry-collaboration.html">Industry Collaboration</a>
+                <div class="dropdown-header">Research Areas</div>
+                <a href="research/research-areas/inorganic.html">Inorganic</a>
+                <a href="research/research-areas/organic.html">Organic</a>
+                <a href="research/research-areas/physical.html">Physical</a>
+                <a href="research/research-areas/theoretical.html">Theoretical</a>
+                <a href="research/research-areas/materials-chemistry.html">Materials Chemistry</a>
+                <a href="research/research-areas/catalysis.html">Catalysis</a>
+                <a href="research/research-areas/energy-storage.html">Energy Storage</a>
+                <a href="research/research-areas/computational-chemistry.html">Computational Chemistry</a>
+                <a href="research/research-areas/nanoscience.html">Nanoscience</a>
+                <div class="dropdown-header">Centers</div>
+                <a href="research/centers/energy-center.html">Energy Center</a>
+                <a href="research/centers/materials-center.html">Materials Center</a>
+                <a href="research/centers/sustainability-center.html">Sustainability Center</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">People ▾</button>
+            <div class="dropdown-content">
+                <div class="dropdown-header">Faculty</div>
+                <a href="people/faculty/inorganic.html">Inorganic</a>
+                <a href="people/faculty/organic.html">Organic</a>
+                <a href="people/faculty/physical.html">Physical</a>
+                <a href="people/faculty/emeritus.html">Emeritus</a>
+                <a href="people/faculty/visiting.html">Visiting</a>
+                <a href="people/staff.html">Staff</a>
+                <a href="people/postdocs.html">Postdocs</a>
+                <div class="dropdown-header">Students</div>
+                <a href="people/students/bs.html">BS Students</a>
+                <a href="people/students/msc.html">MSc Students</a>
+                <a href="people/students/phd.html">PhD Students</a>
+                <a href="people/students/project-students.html">Project Students</a>
+                <a href="people/alumni.html">Alumni</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Admissions ▾</button>
+            <div class="dropdown-content">
+                <a href="admissions/bs-admission.html">BS Admission</a>
+                <a href="admissions/msc-admission.html">MSc Admission</a>
+                <a href="admissions/phd-admission.html">PhD Admission</a>
+                <a href="admissions/international-admission.html">International Admission</a>
+                <a href="admissions/faq.html">FAQ</a>
+                <a href="admissions/brochure.html">Brochure</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Seminars ▾</button>
+            <div class="dropdown-content">
+                <a href="seminars/upcoming.html">Upcoming Seminars</a>
+                <a href="seminars/past.html">Past Seminars</a>
+                <a href="seminars/distinguished-lectures.html">Distinguished Lectures</a>
+                <a href="seminars/colloquium.html">Colloquium</a>
+                <a href="seminars/student-seminars.html">Student Seminars</a>
+                <a href="seminars/thesis-viva.html">Thesis Viva</a>
+                <a href="seminars/conferences.html">Conferences</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Facilities ▾</button>
+            <div class="dropdown-content">
+                <a href="facilities/teaching-labs.html">Teaching Labs</a>
+                <a href="facilities/research-labs.html">Research Labs</a>
+                <a href="facilities/central-instrumentation.html">Central Instrumentation</a>
+                <a href="facilities/nmr-facility.html">NMR Facility</a>
+                <a href="facilities/xrd-facility.html">XRD Facility</a>
+                <a href="facilities/microscopy.html">Microscopy</a>
+                <a href="facilities/computational-lab.html">Computational Lab</a>
+                <a href="facilities/safety.html">Safety</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Placements ▾</button>
+            <div class="dropdown-content">
+                <a href="placements/statistics.html">Statistics</a>
+                <a href="placements/recruiters.html">Recruiters</a>
+                <a href="placements/internships.html">Internships</a>
+                <a href="placements/higher-studies.html">Higher Studies</a>
+            </div>
+        </div>
+        
+        <div class="dropdown">
+            <button class="dropbtn">Collaborations ▾</button>
+            <div class="dropdown-content">
+                <a href="collaborations/national.html">National</a>
+                <a href="collaborations/international.html">International</a>
+                <a href="collaborations/industry.html">Industry</a>
+                <a href="collaborations/mou.html">MoU</a>
+                <a href="collaborations/exchange-programs.html">Exchange Programs</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">More ▾</button>
+            <div class="dropdown-content">
+                <div class="dropdown-header">Outreach</div>
+                <a href="outreach/school-programs.html">School Programs</a>
+                <a href="outreach/workshops.html">Workshops</a>
+                <a href="outreach/public-lectures.html">Public Lectures</a>
+                <a href="outreach/chemical-society.html">Chemical Society</a>
+                <div class="dropdown-header">News</div>
+                <a href="news/announcements.html">Announcements</a>
+                <a href="news/awards.html">Awards</a>
+                <a href="news/achievements.html">Achievements</a>
+                <a href="news/newsletters.html">Newsletters</a>
+                <div class="dropdown-header">Resources</div>
+                <a href="resources/scholarships.html">Scholarships</a>
+                <a href="resources/forms.html">Forms</a>
+                <a href="resources/downloads.html">Downloads</a>
+                <a href="resources/internal-portal.html">Internal Portal</a>
+                <div class="dropdown-header">Contact</div>
+                <a href="contact/contact-us.html">Contact Us</a>
+                <a href="contact/directory.html">Directory</a>
+                <a href="contact/location.html">Location</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="welcome-box">
+            <h1>Chemistry Department - IIT Madras</h1>
+            <div class="subtitle">Hover over the navigation bar above to view and open all the links.</div>
+            <p>This layout serves as the root menu for all the pages in your project. Each item in the top navigation is a dropdown containing every single HTML file generated.</p>
+        </div>
+    </div>
+
+</body>
+</html>
