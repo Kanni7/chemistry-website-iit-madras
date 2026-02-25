@@ -1,87 +1,107 @@
 import React from 'react';
-import { BookOpen, FlaskConical, Users, ArrowRight } from 'lucide-react';
+import { BookOpen, FlaskConical, Users, ArrowRight, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
   return (
-    <div className="w-full flex-grow flex flex-col items-center">
+    <div className="w-full flex-grow flex flex-col bg-white">
       
       {/* Hero Section */}
-      <section className="w-full bg-[#1a2a3a] text-white py-20 px-4 text-center relative overflow-hidden">
-        {/* Abstract background gradient effect */}
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#1a2a3a] via-[#2c3e50] to-[#f39c12] opacity-30 pointer-events-none"></div>
-        
-        <div className="container relative z-10 animate-fade-in flex flex-col items-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 text-white tracking-tight leading-tight max-w-4xl mx-auto">
+      <section className="w-full bg-[#f5f6f8] text-[#1f2937] pt-24 pb-28 px-6 text-center border-b border-[#e5e7eb]">
+        <div className="container mx-auto max-w-5xl flex flex-col items-center">
+            <h1 className="text-4xl md:text-5xl lg:text-5xl font-extrabold mb-6 tracking-tight leading-tight text-[#1f2937]">
               Department of Chemistry
-              <span className="block text-[#f39c12] mt-2 text-3xl md:text-4xl">IIT Madras</span>
+              <span className="block text-[#4b5563] mt-3 text-3xl md:text-4xl lg:text-4xl font-bold">
+                Indian Institute of Technology Madras
+              </span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
-              Pioneering research, world-class education, and interdisciplinary innovation in chemical sciences.
+            <div className="w-16 h-1 bg-[#b45309] mb-8"></div>
+            <p className="text-lg md:text-xl text-[#4b5563] max-w-3xl mx-auto mb-10 leading-relaxed font-medium">
+              Pioneering research, world-class education, and interdisciplinary innovation in chemical sciences at India's premier institute.
             </p>
             
-            <div className="flex flex-wrap justify-center gap-4">
-               <Link to="/about/overview" className="bg-[#f39c12] hover:bg-[#e67e22] text-white font-bold py-3 px-8 text-lg transition-all rounded shadow-lg flex items-center gap-2 transform hover:-translate-y-1">
+            <div className="flex flex-col sm:flex-row justify-center gap-4 w-full px-4">
+               <Link to="/about/overview" className="bg-[#b45309] hover:bg-[#92400e] text-white font-semibold py-3.5 px-8 transition-colors flex items-center justify-center gap-2 w-full sm:w-auto shadow-sm">
                  Discover More
                </Link>
-               <Link to="/admissions/bs" className="bg-transparent hover:bg-white/10 text-white font-bold py-3 px-8 text-lg transition-all rounded shadow-lg border-2 border-white/30 flex items-center gap-2">
-                 Admissions
+               <Link to="/academics" className="bg-white hover:bg-[#f5f6f8] text-[#1f2937] font-semibold py-3.5 px-8 transition-colors border border-[#e5e7eb] flex items-center justify-center gap-2 w-full sm:w-auto shadow-sm">
+                 Academic Programs
                </Link>
             </div>
         </div>
       </section>
 
-      {/* Legacy Welcome Box translation */}
-      <section className="container py-16 -mt-10 relative z-20 px-4">
-        <div className="bg-white p-8 md:p-12 rounded-xl shadow-xl border-t-4 border-[#1a2a3a] text-center max-w-4xl mx-auto transform hover:-translate-y-1 transition-transform">
-          <h2 className="text-3xl font-bold text-[#1a2a3a] mb-4">Welcome to Our Digital Portal</h2>
-          <div className="text-[#666] text-lg mb-6">Explore the new architecture of our platform</div>
-          <p className="text-gray-700 leading-relaxed">
-            This layout serves as the root menu for all the pages in your project. Each item in the top navigation is a modern React dropdown containing routes to every specific section of the department, efficiently organizing Academics, Research, People, and Facilities.
-          </p>
+      {/* Overview Metric Banner */}
+      <section className="container mx-auto px-6 py-16 border-b border-[#e5e7eb]">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-12 max-w-6xl mx-auto">
+          <div className="text-center md:text-left flex-1 border-r-0 md:border-r border-[#e5e7eb] md:pr-10">
+             <h2 className="text-2xl font-bold text-[#1f2937]">At a Glance</h2>
+             <p className="text-[#4b5563] mt-2 font-medium">A leading hub for chemical research and education.</p>
+          </div>
+          <div className="flex gap-12 lg:gap-20 flex-wrap justify-center flex-1">
+             <div className="text-center">
+               <div className="text-4xl font-extrabold text-[#1f2937]">50+</div>
+               <div className="text-xs font-bold text-[#4b5563] uppercase tracking-widest mt-2">Faculty Members</div>
+             </div>
+             <div className="text-center">
+               <div className="text-4xl font-extrabold text-[#1f2937]">4</div>
+               <div className="text-xs font-bold text-[#4b5563] uppercase tracking-widest mt-2">Research Centers</div>
+             </div>
+             <div className="text-center">
+               <div className="text-4xl font-extrabold text-[#1f2937]">100s</div>
+               <div className="text-xs font-bold text-[#4b5563] uppercase tracking-widest mt-2">Yearly Publications</div>
+             </div>
+          </div>
         </div>
       </section>
 
-      {/* Quick Links / Highlights */}
-      <section className="w-full bg-[#f4f4f9] py-16 px-4">
-        <div className="container">
-          <h2 className="text-3xl font-bold text-center text-[#1a2a3a] mb-12">Academic Excellence & Research</h2>
+      {/* Core Pillars */}
+      <section className="w-full py-20 px-6 bg-[#ffffff]">
+        <div className="container mx-auto max-w-7xl">
+          <div className="mb-14">
+            <h2 className="text-3xl font-bold text-[#1f2937] mb-4">Focus Areas</h2>
+            <div className="w-16 h-[3px] bg-[#b45309]"></div>
+          </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             
             {/* Card 1 */}
-            <div className="card text-center group">
-              <div className="bg-[#f0f4f8] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-[#1a2a3a] transition-colors">
-                <BookOpen size={30} className="text-[#1a2a3a] group-hover:text-white transition-colors" />
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-[#1a2a3a]">Programs</h3>
-              <p className="text-gray-600 mb-6">Comprehensive BS, Dual Degree, MSc, and PhD programs designed to forge the next generation of scientists.</p>
-              <Link to="/academics" className="text-[#e74c3c] font-semibold inline-flex items-center gap-1 hover:text-[#c0392b] transition-colors">
-                View Academics <ArrowRight size={16} />
+            <div className="bg-[#f5f6f8] p-8 border border-[#e5e7eb] hover:border-[#b45309] transition-colors group">
+              <BookOpen size={28} className="text-[#1f2937] mb-6" strokeWidth={1.5} />
+              <h3 className="text-lg font-bold mb-3 text-[#1f2937]">Academic Programs</h3>
+              <p className="text-[#4b5563] mb-6 text-sm leading-relaxed">BS, Dual Degree, MSc, and PhD programs designed to forge the next generation of scientists.</p>
+              <Link to="/academics" className="inline-flex items-center gap-2 text-sm font-semibold text-[#b45309] hover:text-[#92400e] transition-colors">
+                View Curriculum <ArrowRight size={16} />
               </Link>
             </div>
 
             {/* Card 2 */}
-            <div className="card text-center group">
-              <div className="bg-[#f0f4f8] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-[#f39c12] transition-colors">
-                <FlaskConical size={30} className="text-[#f39c12] group-hover:text-white transition-colors" />
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-[#1a2a3a]">Research</h3>
-              <p className="text-gray-600 mb-6">Cutting-edge facilities ranging from theoretical catalysis to advanced materials and energy storage.</p>
-              <Link to="/research" className="text-[#e74c3c] font-semibold inline-flex items-center gap-1 hover:text-[#c0392b] transition-colors">
+            <div className="bg-[#f5f6f8] p-8 border border-[#e5e7eb] hover:border-[#b45309] transition-colors group">
+              <FlaskConical size={28} className="text-[#1f2937] mb-6" strokeWidth={1.5} />
+              <h3 className="text-lg font-bold mb-3 text-[#1f2937]">Research Facilities</h3>
+              <p className="text-[#4b5563] mb-6 text-sm leading-relaxed">State-of-the-art facilities ranging from theoretical catalysis to advanced materials and energy storage.</p>
+              <Link to="/research" className="inline-flex items-center gap-2 text-sm font-semibold text-[#b45309] hover:text-[#92400e] transition-colors">
                 Explore Research <ArrowRight size={16} />
               </Link>
             </div>
 
             {/* Card 3 */}
-            <div className="card text-center group">
-              <div className="bg-[#f0f4f8] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-[#e74c3c] transition-colors">
-                <Users size={30} className="text-[#e74c3c] group-hover:text-white transition-colors" />
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-[#1a2a3a]">People</h3>
-              <p className="text-gray-600 mb-6">A diverse community of globally recognized faculty, brilliant students, and impactful alumni.</p>
-              <Link to="/people" className="text-[#e74c3c] font-semibold inline-flex items-center gap-1 hover:text-[#c0392b] transition-colors">
+            <div className="bg-[#f5f6f8] p-8 border border-[#e5e7eb] hover:border-[#b45309] transition-colors group">
+              <Users size={28} className="text-[#1f2937] mb-6" strokeWidth={1.5} />
+              <h3 className="text-lg font-bold mb-3 text-[#1f2937]">Our Community</h3>
+              <p className="text-[#4b5563] mb-6 text-sm leading-relaxed">A diverse and vibrant community of globally recognized faculty, brilliant students, and notable alumni.</p>
+              <Link to="/people" className="inline-flex items-center gap-2 text-sm font-semibold text-[#b45309] hover:text-[#92400e] transition-colors">
                 Meet the Team <ArrowRight size={16} />
+              </Link>
+            </div>
+            
+             {/* Card 4 */}
+             <div className="bg-[#f5f6f8] p-8 border border-[#e5e7eb] hover:border-[#b45309] transition-colors group">
+              <Globe size={28} className="text-[#1f2937] mb-6" strokeWidth={1.5} />
+              <h3 className="text-lg font-bold mb-3 text-[#1f2937]">Global Collaborations</h3>
+              <p className="text-[#4b5563] mb-6 text-sm leading-relaxed">Fostering strong partnerships with national and international universities and industry alliances.</p>
+              <Link to="/collaborations/international" className="inline-flex items-center gap-2 text-sm font-semibold text-[#b45309] hover:text-[#92400e] transition-colors">
+                View Partnerships <ArrowRight size={16} />
               </Link>
             </div>
 

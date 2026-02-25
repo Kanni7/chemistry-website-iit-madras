@@ -1,103 +1,29 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import "tailwindcss";
 
-:root {
-  /* IIT Madras inspired color palette */
-  --color-primary: #1a2a3a; /* Deep Blue */
-  --color-secondary: #f39c12; /* Warm Orange/Gold */
-  --color-accent: #e74c3c; /* Red accent */
-  --color-background: #f4f4f9;
-  --color-surface: #ffffff;
-
-  /* Text */
-  --text-main: #333333;
-  --text-muted: #666666;
-  --text-light: #ffffff;
-
-  /* Shadows and Effects */
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --glass-bg: rgba(255, 255, 255, 0.95);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.2);
-
-  /* Inter / System fonts */
-  --font-sans:
-    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif;
+@theme {
+  /* Restrained Institutional Palette Mapping */
+  --color-surface-base: #f5f6f8;
+  --color-surface-primary: #ffffff;
+  --color-surface-muted: #eef1f4;
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #4b5563;
+  --color-accent-amber: #b45309;
+  --color-border-subtle: #e5e7eb;
 }
 
-* {
-  box-sizing: border-box;
+/* Global Strict Rules for Scrollbar Physics & Baseline */
+html,
+body,
+#root {
+  min-height: 100vh;
   margin: 0;
   padding: 0;
-}
-
-body {
-  font-family: var(--font-sans);
-  background-color: var(--color-background);
-  color: var(--text-main);
-  line-height: 1.6;
+  background-color: var(--color-surface-base);
+  color: var(--color-text-primary);
+  font-family: 'Inter', 'Roboto', ui-sans-serif, system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; /* CRITICAL BUGFIX: Prevents horizontal scrolling */
 }
 
-/* Typography */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: var(--color-primary);
-  font-weight: 700;
-  line-height: 1.2;
-}
 
-h1 {
-  font-size: 2.5rem;
-  letter-spacing: -0.02em;
-}
-
-p {
-  margin-bottom: 1rem;
-}
-
-/* Utilities */
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
-}
-
-/* Common Components */
-.card {
-  background: var(--color-surface);
-  border-radius: 12px;
-  box-shadow: var(--shadow-sm);
-  padding: 2rem;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
