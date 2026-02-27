@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import BsAdmissions from './pages/BsAdmissions'; // Adjust the path if you saved it somewhere else
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Placeholder from './pages/Placeholder';
@@ -14,6 +15,9 @@ function App() {
           
           {/* Index Route - Home Page */}
           <Route index element={<Home />} />
+
+          {/* Your brand new route! */}
+          <Route path="admissions/bs" element={<BsAdmissions />} />
           
           {/* Admissions Routes */}
           <Route path="admissions/bs" element={<BsAdmissions />} />
