@@ -272,7 +272,7 @@ const BsAdmissions = () => {
             </motion.div>
 
             <motion.h1 variants={mechanicalReveal} initial="hidden" animate="visible" className="text-6xl md:text-8xl lg:text-[7rem] font-black tracking-tighter leading-[0.85] text-[#111111] mb-6 uppercase">
-              BS IN <br />
+              BS  <br />
               <span className="text-[#0055FF] inline-flex items-center gap-4 relative drop-shadow-sm">
                 CHEMISTRY
                 <motion.div style={{ rotate: rotateFast }} className="origin-center">

@@ -3,6 +3,7 @@ import BsAdmissions from './pages/BsAdmissions'; // Adjust the path if you saved
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Placeholder from './pages/Placeholder';
+import BsAdmissions from './pages/BsAdmissions';
 import './App.css';
 
 function App() {
@@ -16,6 +17,9 @@ function App() {
           <Route index element={<Home />} />
 
           {/* Your brand new route! */}
+          <Route path="admissions/bs" element={<BsAdmissions />} />
+          
+          {/* Admissions Routes */}
           <Route path="admissions/bs" element={<BsAdmissions />} />
           
           {/* Catch-all route mapping to the elegant Placeholder component */}
