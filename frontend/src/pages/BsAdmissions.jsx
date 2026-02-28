@@ -266,7 +266,7 @@ const BsAdmissions = () => {
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1 }} className="flex items-center gap-3 mb-6 bg-white inline-flex pr-4 py-1.5 rounded-full border border-[#111111]/10 shadow-sm">
               <span className="px-3 py-1 bg-[#111111] text-white font-mono text-xs uppercase tracking-widest relative overflow-hidden group shadow-md rounded-full ml-1">
                 <motion.span animate={{ x: ['-100%', '200%'] }} transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: 1 }} className="absolute inset-0 w-1/2 bg-white/20 skew-x-12" />
-                SYS.INIT
+                IIT Madras
               </span>
               <span className="font-mono text-sm text-[#111111] font-bold pl-1 pr-2">Admissions 2026-27</span>
             </motion.div>
