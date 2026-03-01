@@ -50,7 +50,6 @@ const DomainCard = ({ icon: Icon, title, description, linkText, linkTo }) => {
   return (
     <motion.div
       variants={slowReveal}
-      ref={divRef}
       onMouseMove={handleMouseMove}
       // ENHANCED SHADOW: Added shadow-xl shadow-slate-200/60 for a deep, floating base shadow
       className="group cursor-default bg-white/80 backdrop-blur-2xl p-8 border border-slate-200/60 shadow-xl shadow-slate-200/60 transition-all duration-300 flex flex-col h-full rounded-3xl relative overflow-hidden hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(180,83,9,0.15)] hover:border-orange-200"
