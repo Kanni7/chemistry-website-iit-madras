@@ -10,6 +10,8 @@ import Achievements from './pages/Achievements';
 import Rankings from './pages/Rankings';
 import FacilitiesEquipment from './pages/FacilitiesEquipment';
 import History from './pages/History';
+import AcademicCalendar from './pages/AcademicCalendar';
+import TimeTable from './pages/TimeTable';
 import './App.css';
 
 function App() {
@@ -31,6 +33,10 @@ function App() {
           <Route path="about/rankings" element={<Rankings />} />
           <Route path="about/facilities-equipment" element={<FacilitiesEquipment />} />
           <Route path="about/history" element={<History />} />
+
+          {/* Academics Routes */}
+          <Route path="academics/calendar" element={<AcademicCalendar />} />
+          <Route path="academics/timetable" element={<TimeTable />} />
 
           {/* Admissions Routes */}
           <Route path="admissions/bs" element={<BsAdmissions />} />
