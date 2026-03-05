@@ -1,10 +1,22 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import Navigation from './Navigation';
 import logo from '../assets/logo/IITM_LOGO.png';
+
+// Scroll to top on every route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 
 const Layout = () => {
   return (
     <div className="min-h-screen flex flex-col bg-[#f5f6f8] text-[#1f2937] font-sans selection:bg-[#b45309] selection:text-white overflow-x-clip">
+
+      <ScrollToTop />
 
       {/* Global Navigation Bar */}
       <Navigation />
