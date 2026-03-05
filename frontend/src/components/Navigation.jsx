@@ -10,7 +10,7 @@ const NAVIGATION_DATA = [
     title: 'About',
     path: '/about',
     groups: [
-      { heading: null, links: [{ label: 'Overview', to: '/about/overview' }, { label: 'Message From Head', to: '/about/message-from-head' }, { label: 'Vision & Mission', to: '/about/vision-mission' }, { label: 'Achievements', to: '/about/achievements' }, { label: 'Rankings', to: '/about/rankings' }, { label: 'History', to: '/about/history' }] },
+      { heading: null, links: [{ label: 'Overview', to: '/about/overview' }, { label: 'Message From Head', to: '/about/message-from-head' }, { label: 'Achievements', to: '/about/achievements' }, { label: 'Rankings', to: '/about/rankings' }, { label: 'Facilities & Equipment', to: '/about/facilities-equipment' }, { label: 'History', to: '/about/history' }] },
       { heading: 'Administration', links: [{ label: 'Advisory Board', to: '/about/advisory-board' }, { label: 'Committees', to: '/about/committees' }, { label: 'Annual Reports', to: '/about/annual-reports' }] },
       { heading: 'IITM Specific', links: [{ label: 'Industry Partnerships', to: '/about/industry-partnerships' }, { label: 'Research Park Link', to: '/about/research-park-link' }] }
     ]
@@ -142,7 +142,7 @@ const MobileAccordion = ({ navItem, isOpen, toggleMobileAccordion, currentPath, 
                     {group.links.map((link, linkIndex) => (
                       <li key={linkIndex}>
                         <Link to={link.to} onClick={closeMenu} className={`block text-sm transition-colors leading-relaxed ${currentPath === link.to ? 'text-orange-700 font-medium' : 'text-[#4b5563] hover:text-orange-700'}`}>
-                          {link.label}
+                          {link.label}9
                         </Link>
                       </li>
                     ))}
