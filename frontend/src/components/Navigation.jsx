@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ChevronDown, Menu, X, Plus, Minus, Home as HomeIcon, FlaskConical } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, Menu, X, Plus, Minus, Home as HomeIcon } from 'lucide-react';
 import logo from '../assets/logo/IITM_LOGO.png';
 
 // --- Structured Navigation Data Configuration ---
@@ -72,37 +71,24 @@ const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openMobileAccordion, setOpenMobileAccordion] = useState(null);
   const timeoutRef = useRef(null);
-  
-  // FIX: Added the missing isScrolled state!
   const [isScrolled, setIsScrolled] = useState(false);
   
-  // Security State
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('userRole');
 
-  // FIX: Added the scroll listener to update isScrolled when the user scrolls down
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Smart Dashboard Routing Logic
   const getDashboardLink = () => {
     if (role === 'admin') return '/admin';
     if (role === 'faculty') return '/faculty-dashboard';
     if (role === 'student') return '/student-dashboard';
-    return '/login'; // Fallback
+    return '/login'; 
   };
 
-  // Logout Logic
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userRole');
@@ -110,17 +96,12 @@ const Navigation = () => {
     window.location.reload(); 
   };
 
-  // Close menus on route change
   useEffect(() => {
-    const t = setTimeout(() => {
-      setIsMobileMenuOpen(false);
-      setActiveDropdown(null);
-      setOpenMobileAccordion(null);
-    }, 0);
-    return () => clearTimeout(t);
+    setIsMobileMenuOpen(false);
+    setActiveDropdown(null);
+    setOpenMobileAccordion(null);
   }, [location]);
 
-  // Handle Desktop Hover Dynamics
   const handleMouseEnter = (menu) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setActiveDropdown(menu);
@@ -132,81 +113,25 @@ const Navigation = () => {
     }, 150); 
   };
 
-  const toggleMobileAccordion = (title) => {
-    setOpenMobileAccordion(openMobileAccordion === title ? null : title);
-  };
-
-  // === Desktop Components ===
-  const NavButton = ({ title, isActive }) => (
-    <button className={`relative inline-flex items-center font-medium text-[15px] py-7 px-4 border-none bg-transparent cursor-pointer transition-colors duration-150 ${isActive ? 'text-[#b45309]' : 'text-[#1f2937] hover:text-[#b45309]'}`}>
-      {title} 
-      <ChevronDown size={14} className={`ml-1.5 transition-transform duration-200 ${isActive ? 'rotate-180 text-[#b45309]' : 'text-[#4b5563]'}`} />
-      {isActive && (
-        <span className="absolute bottom-0 left-4 right-4 h-[3px] bg-[#b45309]" aria-hidden="true" />
-      )}
-    </button>
-  );
-
-  const MegaMenu = ({ navItem, isActive }) => {
-    const colCount = Math.min(navItem.groups.length, 4);
-    return (
-      <div className={`absolute top-[80px] left-1/2 -translate-x-1/2 bg-white border border-[#e5e7eb] shadow-lg rounded-b-md transition-all duration-200 origin-top z-50 overflow-hidden w-full max-w-max sm:max-w-[calc(100vw-3rem)] ${isActive ? 'opacity-100 visible scale-y-100 translate-y-0' : 'opacity-0 invisible scale-y-95 pointer-events-none -translate-y-2'}`}>
-        <div className="grid gap-x-8 gap-y-8 py-8 px-10" style={{ gridTemplateColumns: `repeat(${colCount}, minmax(180px, 1fr))` }}>
-          {navItem.groups.map((group, groupIndex) => (
-            <div key={groupIndex} className="flex flex-col gap-3">
-              {group.heading && (
-                <div className="text-xs font-bold text-[#4b5563] uppercase tracking-wider mb-1">{group.heading}</div>
-              )}
-              <ul className="flex flex-col gap-2 m-0 p-0 list-none">
-                {group.links.map((link, linkIndex) => (
-                  <li key={linkIndex}>
-                    <Link to={link.to} className="block text-[#4b5563] text-[15px] hover:text-[#b45309] transition-colors duration-200 break-words leading-snug py-1">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-        {navItem.path && (
-           <div className="bg-[#f5f6f8] border-t border-[#e5e7eb] px-10 py-4 flex justify-end">
-             <Link to={navItem.path} className="text-[14px] font-semibold text-[#1f2937] hover:text-[#b45309] transition-colors flex items-center gap-1">
-               Go to {navItem.title} Overview <span aria-hidden="true">&rarr;</span>
-             </Link>
-           </div>
-        )}
-      </div>
-    );
-  };
-
-  // === Mobile Components ===
+  // --- Mobile Accordion Component ---
   const MobileAccordion = ({ navItem }) => {
     const isOpen = openMobileAccordion === navItem.title;
     return (
       <div className="border-b border-[#e5e7eb]">
-        <button onClick={() => toggleMobileAccordion(navItem.title)} className="w-full flex items-center justify-between py-4 px-6 text-left text-[#1f2937] font-semibold focus:outline-none">
+        <button onClick={() => setOpenMobileAccordion(isOpen ? null : navItem.title)} className="w-full flex items-center justify-between py-4 px-6 text-left text-[#1f2937] font-semibold focus:outline-none">
           {navItem.title}
           {isOpen ? <Minus size={18} className="text-[#4b5563]" /> : <Plus size={18} className="text-[#4b5563]" />}
         </button>
         <div className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
            <div className="overflow-hidden">
              <div className="px-6 space-y-6 pb-5 pt-1">
-               {navItem.path && (
-                 <Link to={navItem.path} className="block text-[#b45309] font-semibold text-sm">{navItem.title} Overview &rarr;</Link>
-               )}
+               {navItem.path && <Link to={navItem.path} className="block text-[#b45309] font-semibold text-sm">{navItem.title} Overview &rarr;</Link>}
                {navItem.groups.map((group, index) => (
                   <div key={index} className="space-y-3">
-                    {group.heading && (
-                      <div className="text-xs font-bold text-[#4b5563] uppercase tracking-wider pb-1">{group.heading}</div>
-                    )}
+                    {group.heading && <div className="text-xs font-bold text-[#4b5563] uppercase tracking-wider pb-1">{group.heading}</div>}
                     <ul className="space-y-4">
                       {group.links.map((link, linkIndex) => (
-                        <li key={linkIndex}>
-                          <Link to={link.to} className="block text-[#4b5563] text-sm hover:text-[#b45309] transition-colors leading-relaxed">
-                            {link.label}
-                          </Link>
-                        </li>
+                        <li key={linkIndex}><Link to={link.to} className="block text-[#4b5563] text-sm hover:text-[#b45309] transition-colors">{link.label}</Link></li>
                       ))}
                     </ul>
                   </div>
@@ -219,11 +144,13 @@ const Navigation = () => {
   };
 
   return (
-    <nav className={`fixed w-full top-0 z-[1000] transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.06)] border-transparent' : 'bg-white/80 backdrop-blur-sm border-b border-black/5'}`}>
-
+    // HARDCODED Z-INDEX to violently override any dashboard tables underneath it
+    <nav style={{ zIndex: 99999 }} className={`fixed w-full top-0 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.06)] border-transparent' : 'bg-white/90 backdrop-blur-sm border-b border-black/5'}`}>
       <div className="container mx-auto px-6 max-w-7xl">
         <div className={`flex items-center justify-between transition-all duration-300 ${isScrolled ? 'h-16' : 'h-20'}`}>
-          <Link to="/" className="flex items-center gap-4 group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 rounded-lg">
+          
+          {/* Logo Section */}
+          <Link to="/" className="flex items-center gap-4 group focus:outline-none">
             <img src={logo} alt="IIT Madras Chemistry Department" className={`w-auto object-contain transition-all duration-300 ${isScrolled ? 'h-[42px]' : 'h-[52px]'}`} />
             <div className="flex-col justify-center hidden sm:flex">
               <span className="text-[17px] font-bold text-[#1f2937] group-hover:text-orange-700 transition-colors leading-tight tracking-tight">Department of Chemistry</span>
@@ -231,40 +158,67 @@ const Navigation = () => {
             </div>
           </Link>
 
-          <button
-            type="button"
-            className="lg:hidden p-2 text-[#4b5563] hover:text-orange-700 hover:bg-orange-50 rounded-lg transition-colors focus:outline-none"
-            onClick={() => setIsMobileMenuOpen(true)}
-            aria-label="Open primary menu"
-          >
+          {/* Mobile Hamburger */}
+          <button type="button" className="lg:hidden p-2 text-[#4b5563] hover:text-orange-700" onClick={() => setIsMobileMenuOpen(true)}>
             <Menu size={28} />
           </button>
 
-          {/* Desktop Navigation Links & Auth Container */}
-          <div className="hidden xl:flex xl:items-center xl:gap-2 h-full relative">
-            <Link to="/" className="inline-flex items-center justify-center h-10 w-10 rounded text-[#4b5563] hover:text-[#b45309] hover:bg-[#f5f6f8] transition-colors duration-150">
+          {/* Desktop Links & Auth Container */}
+          <div className="hidden xl:flex xl:items-center h-full">
+            <Link to="/" className="inline-flex items-center justify-center h-full px-3 text-[#4b5563] hover:text-[#b45309] transition-colors">
               <HomeIcon size={20} />
             </Link>
 
-            {/* Loop through strictly structured JSON to build Nav */}
-            {NAVIGATION_DATA.map((navItem) => {
+            {/* Loop through JSON to build Nav */}
+            {NAVIGATION_DATA.map((navItem, index) => {
               const isActive = activeDropdown === navItem.title;
-              return (
-                <div key={navItem.title} className="h-full static group" onMouseEnter={() => handleMouseEnter(navItem.title)} onMouseLeave={handleMouseLeave}>
-                  <NavButton title={navItem.title} isActive={isActive} />
-                  <MegaMenu navItem={navItem} isActive={isActive} />
-                </div>
-              )}) }
-            </div>
+              // Smart alignment: Push the last 2 menus to the left so they don't fall off the screen!
+              const isRightAligned = index >= NAVIGATION_DATA.length - 2;
 
-            {/* UPGRADED: The Authentication Buttons (Desktop) */}
-            <div className="flex items-center gap-4 ml-4 pl-4 border-l border-gray-300 hidden xl:flex">
+              return (
+                <div key={navItem.title} className="h-full relative group flex items-center" onMouseEnter={() => handleMouseEnter(navItem.title)} onMouseLeave={handleMouseLeave}>
+                  
+                  {/* The Button */}
+                  <button className={`relative h-full px-4 flex items-center font-medium text-[15px] transition-colors duration-150 ${isActive ? 'text-[#b45309]' : 'text-[#1f2937] hover:text-[#b45309]'}`}>
+                    {navItem.title}
+                    <ChevronDown size={14} className={`ml-1.5 transition-transform duration-200 ${isActive ? 'rotate-180 text-[#b45309]' : 'text-[#4b5563]'}`} />
+                    {/* Fixed Orange Border: Now properly constrained to just the button! */}
+                    {isActive && <span className="absolute bottom-0 left-0 w-full h-[3px] bg-[#b45309]" aria-hidden="true" />}
+                  </button>
+
+                  {/* The Dropdown Menu */}
+                  <div className={`absolute top-full ${isRightAligned ? 'right-0' : 'left-1/2 -translate-x-1/2'} bg-white border border-[#e5e7eb] shadow-2xl rounded-b-md transition-all duration-200 origin-top overflow-hidden w-max max-w-[calc(100vw-2rem)] ${isActive ? 'opacity-100 visible scale-y-100 translate-y-0' : 'opacity-0 invisible scale-y-95 pointer-events-none -translate-y-2'}`} style={{ zIndex: 100000 }}>
+                    <div className="flex p-8 gap-10">
+                      {navItem.groups.map((group, groupIndex) => (
+                        <div key={groupIndex} className="flex flex-col gap-3 min-w-[150px]">
+                          {group.heading && <div className="text-xs font-bold text-[#4b5563] uppercase tracking-wider mb-1">{group.heading}</div>}
+                          <ul className="flex flex-col gap-2 m-0 p-0 list-none">
+                            {group.links.map((link, linkIndex) => (
+                              <li key={linkIndex}>
+                                <Link to={link.to} className="block text-[#4b5563] text-[15px] hover:text-[#b45309] transition-colors py-1">{link.label}</Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                    {navItem.path && (
+                       <div className="bg-[#f5f6f8] border-t border-[#e5e7eb] px-8 py-4 flex justify-end">
+                         <Link to={navItem.path} className="text-[14px] font-semibold text-[#1f2937] hover:text-[#b45309] transition-colors flex items-center gap-1">
+                           Go to {navItem.title} Overview <span aria-hidden="true">&rarr;</span>
+                         </Link>
+                       </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Desktop Auth Section */}
+            <div className="flex items-center gap-4 ml-4 pl-4 border-l border-gray-300 h-8">
               {token ? (
                 <>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-gray-500 bg-gray-100 px-2.5 py-1 rounded">
-                    {role}
-                  </span>
-                  {/* Smart Dashboard Link */}
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-gray-500 bg-gray-100 px-2.5 py-1 rounded">{role}</span>
                   <Link to={getDashboardLink()} className="font-semibold text-sm text-[#b45309] hover:text-[#92400e] transition-colors whitespace-nowrap">
                     My Dashboard
                   </Link>
@@ -278,57 +232,33 @@ const Navigation = () => {
                 </Link>
               )}
             </div>
-            {/* End of Desktop Auth Buttons */}
-
           </div>
         </div>
+      </div>
 
-      {/* --- Mobile Drawer Navigation --- */}
+      {/* Mobile Drawer (Hidden on Desktop) */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[2000] xl:hidden">
-           <div className="fixed inset-0 bg-black/40 transition-opacity" onClick={() => setIsMobileMenuOpen(false)}></div>
-           
-           <div className="fixed inset-y-0 right-0 w-[85%] max-w-sm bg-[#f5f6f8] shadow-2xl flex flex-col h-full transform transition-transform duration-300 translate-x-0 overflow-hidden">
-             
+        <div className="fixed inset-0 z-[100000] xl:hidden">
+           <div className="fixed inset-0 bg-black/40" onClick={() => setIsMobileMenuOpen(false)}></div>
+           <div className="fixed inset-y-0 right-0 w-[85%] max-w-sm bg-[#f5f6f8] shadow-2xl flex flex-col h-full overflow-hidden">
              <div className="flex items-center justify-between px-6 py-5 border-b border-[#e5e7eb] bg-white">
                <span className="text-[#1f2937] font-bold uppercase tracking-widest text-sm">Menu</span>
-               <button onClick={() => setIsMobileMenuOpen(false)} className="text-[#4b5563] hover:text-[#1f2937] p-1 transition-colors">
-                 <X size={24} />
-               </button>
+               <button onClick={() => setIsMobileMenuOpen(false)} className="text-[#4b5563] hover:text-[#1f2937] p-1"><X size={24} /></button>
              </div>
-
              <div className="flex-1 overflow-y-auto w-full bg-white flex flex-col">
-               <Link to="/" className="block text-[#1f2937] font-semibold py-4 px-6 border-b border-[#e5e7eb]">
-                 Home
-               </Link>
-
-               {NAVIGATION_DATA.map((navItem) => (
-                 <MobileAccordion key={navItem.title} navItem={navItem} />
-               ))}
-               
-               {/* UPGRADED: The Authentication Buttons (Mobile) */}
+               <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="block text-[#1f2937] font-semibold py-4 px-6 border-b border-[#e5e7eb]">Home</Link>
+               {NAVIGATION_DATA.map((navItem) => <MobileAccordion key={navItem.title} navItem={navItem} />)}
                <div className="p-6 mt-auto bg-gray-50 border-t border-gray-200">
                   {token ? (
                     <div className="flex flex-col gap-3">
-                      <span className="text-xs font-bold uppercase tracking-wider text-gray-500">
-                        Logged in as: {role}
-                      </span>
-                      {/* Smart Dashboard Link */}
-                      <Link to={getDashboardLink()} onClick={() => setIsMobileMenuOpen(false)} className="block text-center bg-[#1f2937] text-white font-bold py-3 rounded-sm hover:bg-black transition-colors shadow-sm">
-                        Go to My Dashboard
-                      </Link>
-                      <button onClick={handleLogout} className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-sm transition-colors shadow-sm">
-                        Logout
-                      </button>
+                      <span className="text-xs font-bold uppercase tracking-wider text-gray-500">Logged in as: {role}</span>
+                      <Link to={getDashboardLink()} onClick={() => setIsMobileMenuOpen(false)} className="block text-center bg-[#1f2937] text-white font-bold py-3 rounded-sm">Go to My Dashboard</Link>
+                      <button onClick={handleLogout} className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-sm">Logout</button>
                     </div>
                   ) : (
-                    <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="block w-full bg-[#1f2937] hover:bg-black text-white text-center font-bold py-3 rounded-sm transition-colors shadow-sm">
-                      Portal Login
-                    </Link>
+                    <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="block w-full bg-[#1f2937] text-white text-center font-bold py-3 rounded-sm">Portal Login</Link>
                   )}
                </div>
-               {/* End of Mobile Auth Buttons */}
-
              </div>
            </div>
         </div>

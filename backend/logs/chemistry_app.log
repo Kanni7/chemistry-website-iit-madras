@@ -183,3 +183,64 @@
 2026-03-03 19:43:11,571 - INFO - Admin toggled User ID 3 status to Suspended.
 2026-03-06 18:48:35,613 - INFO - Chemistry Department Server initialized successfully.
 2026-03-06 18:48:36,057 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 21:59:40,790 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 21:59:41,962 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 22:08:57,739 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 22:08:58,839 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 22:09:12,406 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-06 22:10:01,104 - INFO - Successful login for faculty: prof@smail.iitm.ac.in
+2026-03-06 22:10:12,172 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-06 22:34:01,971 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-06 22:35:55,008 - INFO - Admin toggled User ID 2 status to Activated.
+2026-03-06 22:35:56,760 - INFO - Admin toggled User ID 3 status to Activated.
+2026-03-06 22:41:57,537 - WARNING - Failed login attempt for email: prof@smail.iitm.ac.in
+2026-03-06 22:42:06,091 - INFO - Successful login for faculty: prof@smail.iitm.ac.in
+2026-03-06 22:42:27,613 - INFO - Notice published by Prof. Sanjay Kumar
+2026-03-06 22:53:15,760 - INFO - Successful login for faculty: prof@smail.iitm.ac.in
+2026-03-06 22:54:04,925 - INFO - Successful login for student: cy25b009@smail.iitm.ac.in
+2026-03-06 22:54:34,105 - INFO - Successful login for faculty: prof@smail.iitm.ac.in
+2026-03-06 22:54:56,943 - INFO - Notice published by Prof. Sanjay Kumar
+2026-03-06 22:55:19,642 - WARNING - Failed login attempt for email: cy25b009@smail.iitm.ac.in
+2026-03-06 22:55:30,980 - INFO - Successful login for student: cy25b009@smail.iitm.ac.in
+2026-03-06 22:56:32,360 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-06 22:57:01,583 - INFO - Admin toggled User ID 2 status to Suspended.
+2026-03-06 22:57:03,939 - INFO - Admin toggled User ID 2 status to Activated.
+2026-03-06 22:57:09,192 - INFO - Admin toggled User ID 2 status to Suspended.
+2026-03-06 22:57:34,605 - INFO - Successful login for student: cy25b009@smail.iitm.ac.in
+2026-03-06 22:57:57,098 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-06 23:11:47,596 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 23:11:48,742 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 23:16:14,653 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 23:16:15,968 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 23:16:21,519 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-06 23:18:46,992 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-06 23:19:45,139 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-06 23:34:25,427 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 23:34:31,423 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 23:34:37,017 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 23:34:42,759 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 23:38:00,070 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 23:41:20,425 - INFO - Super Admin generated with Advanced LMS Schema!
+2026-03-06 23:41:20,426 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 23:41:21,072 - INFO - Super Admin generated with Advanced LMS Schema!
+2026-03-06 23:41:21,072 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 23:43:40,749 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-06 23:45:41,345 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 23:49:05,321 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 23:49:05,870 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 23:56:59,021 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 23:56:59,562 - INFO - Chemistry Department Server initialized successfully.
+2026-03-06 23:58:03,799 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-07 00:03:15,475 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-07 00:06:10,118 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-07 00:11:06,176 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-07 00:11:09,609 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-07 00:11:17,084 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-07 00:11:33,263 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-07 00:11:50,932 - INFO - Chemistry Department Server initialized successfully.
+2026-03-07 00:11:51,512 - INFO - Chemistry Department Server initialized successfully.
+2026-03-07 00:12:07,229 - INFO - Successful login for admin: admin@smail.iitm.ac.in
+2026-03-07 00:17:49,874 - INFO - Chemistry Department Server initialized successfully.
+2026-03-07 00:17:53,606 - INFO - Chemistry Department Server initialized successfully.
+2026-03-07 00:19:25,504 - INFO - Chemistry Department Server initialized successfully.
+2026-03-07 00:20:32,314 - INFO - Chemistry Department Server initialized successfully.

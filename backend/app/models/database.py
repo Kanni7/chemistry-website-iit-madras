@@ -5,16 +5,17 @@ from datetime import datetime
 db = SQLAlchemy()
 
 # ==========================================
-# BRIDGE TABLES (Many-to-Many Relationships)
+# BRIDGE TABLES (Updated for Advanced LMS)
 # ==========================================
 enrollments = db.Table('enrollments',
     db.Column('student_id', db.Integer, db.ForeignKey('student_profiles.id'), primary_key=True),
-    db.Column('course_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True)
+    db.Column('offering_id', db.Integer, db.ForeignKey('course_offerings.id'), primary_key=True)
 )
 
 teaching_assignments = db.Table('teaching_assignments',
     db.Column('faculty_id', db.Integer, db.ForeignKey('faculty_profiles.id'), primary_key=True),
-    db.Column('course_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True)
+    db.Column('offering_id', db.Integer, db.ForeignKey('course_offerings.id'), primary_key=True),
+    db.Column('is_coordinator', db.Boolean, default=False)
 )
 
 # ==========================================
@@ -25,12 +26,9 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
-    role = db.Column(db.String(20), nullable=False) # 'admin', 'faculty', 'student'
+    role = db.Column(db.String(20), nullable=False)
+    status = db.Column(db.String(20), default='Active') 
     
-    # NEW: The Kill Switch! Admin can disable users without deleting them.
-    is_active = db.Column(db.Boolean, default=True) 
-    
-    # Links to profiles
     faculty_profile = db.relationship('FacultyProfile', backref='user', uselist=False, cascade="all, delete-orphan")
     student_profile = db.relationship('StudentProfile', backref='user', uselist=False, cascade="all, delete-orphan")
 
@@ -40,26 +38,45 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def to_dict(self):
+        """Helper for Admin Dashboard to show detailed user info"""
+        profile_details = "N/A"
+        name = "User"
+        
+        if self.role == 'faculty' and self.faculty_profile:
+            name = f"{self.faculty_profile.title} {self.faculty_profile.first_name} {self.faculty_profile.last_name}"
+            profile_details = self.faculty_profile.designation
+        elif self.role == 'student' and self.student_profile:
+            name = f"{self.student_profile.first_name} {self.student_profile.last_name}"
+            profile_details = f"{self.student_profile.roll_number} ({self.student_profile.program})"
+
+        return {
+            "id": self.id,
+            "email": self.email,
+            "role": self.role,
+            "name": name,
+            "details": profile_details,
+            "is_active": self.status == 'Active'
+        }
+
 # ==========================================
-# TABLE 2: FACULTY PROFILES (For Public Site)
+# TABLE 2: FACULTY PROFILES
 # ==========================================
 class FacultyProfile(db.Model):
     __tablename__ = 'faculty_profiles'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     
-    title = db.Column(db.String(20)) # Prof, Dr.
+    title = db.Column(db.String(20))
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
-    designation = db.Column(db.String(100)) # e.g., Assistant Professor
+    designation = db.Column(db.String(100))
     office_room = db.Column(db.String(50))
     phone_ext = db.Column(db.String(20))
-    research_areas = db.Column(db.Text) # e.g., "Organic Synthesis, Catalysis"
+    research_areas = db.Column(db.Text)
     lab_name = db.Column(db.String(100))
     profile_picture_url = db.Column(db.String(255))
     
-    # Relationships
-    courses = db.relationship('Course', secondary=teaching_assignments, backref=db.backref('instructors', lazy='dynamic'))
     advised_students = db.relationship('StudentProfile', backref='advisor', lazy='dynamic')
 
     def to_dict(self):
@@ -72,25 +89,21 @@ class FacultyProfile(db.Model):
         }
 
 # ==========================================
-# TABLE 3: STUDENT PROFILES (Academic Data)
+# TABLE 3: STUDENT PROFILES
 # ==========================================
 class StudentProfile(db.Model):
     __tablename__ = 'student_profiles'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     
-    roll_number = db.Column(db.String(20), unique=True, nullable=False) # e.g., CY26B001
+    roll_number = db.Column(db.String(20), unique=True, nullable=False)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
-    program = db.Column(db.String(50)) # BS, MSc, PhD
+    program = db.Column(db.String(50))
     current_semester = db.Column(db.Integer)
     expected_graduation_year = db.Column(db.Integer)
     
-    # Links to Professor guiding them
     advisor_id = db.Column(db.Integer, db.ForeignKey('faculty_profiles.id'), nullable=True)
-    
-    # Relationships
-    courses = db.relationship('Course', secondary=enrollments, backref=db.backref('students', lazy='dynamic'))
 
     def to_dict(self):
         return {
@@ -102,25 +115,7 @@ class StudentProfile(db.Model):
         }
 
 # ==========================================
-# TABLE 4: COURSES (The Curriculum)
-# ==========================================
-class Course(db.Model):
-    __tablename__ = 'courses'
-    id = db.Column(db.Integer, primary_key=True)
-    course_code = db.Column(db.String(20), unique=True, nullable=False) # e.g., CY1010
-    course_name = db.Column(db.String(150), nullable=False)
-    credits = db.Column(db.Integer)
-
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "course_code": self.course_code,
-            "course_name": self.course_name,
-            "credits": self.credits
-        }
-
-# ==========================================
-# TABLE 5: NOTICES (From Phase 1)
+# TABLE 4: NOTICES
 # ==========================================
 class Notice(db.Model):
     __tablename__ = 'notices'
@@ -141,3 +136,30 @@ class Notice(db.Model):
             'date': self.created_at.strftime('%Y-%m-%d %I:%M %p'),
             'deadline': self.deadline.strftime('%Y-%m-%d %I:%M %p') if self.deadline else None
         }
+
+# ==========================================
+# ADVANCED LMS TABLES
+# ==========================================
+class AcademicTerm(db.Model):
+    __tablename__ = 'academic_terms'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    status = db.Column(db.String(20), default='Active')
+
+class CourseMaster(db.Model):
+    __tablename__ = 'course_masters'
+    id = db.Column(db.Integer, primary_key=True)
+    course_code = db.Column(db.String(20), unique=True, nullable=False)
+    course_name = db.Column(db.String(150), nullable=False)
+
+class CourseOffering(db.Model):
+    __tablename__ = 'course_offerings'
+    id = db.Column(db.Integer, primary_key=True)
+    master_id = db.Column(db.Integer, db.ForeignKey('course_masters.id'))
+    term_id = db.Column(db.Integer, db.ForeignKey('academic_terms.id'))
+    
+    master = db.relationship('CourseMaster', backref='offerings')
+    term = db.relationship('AcademicTerm', backref='offerings')
+    
+    students = db.relationship('StudentProfile', secondary=enrollments, backref=db.backref('enrolled_offerings', lazy='dynamic'))
+    instructors = db.relationship('FacultyProfile', secondary=teaching_assignments, backref=db.backref('teaching_offerings', lazy='dynamic'))
