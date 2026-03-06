@@ -1,7 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, Menu, X, Plus, Minus, Home as HomeIcon } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import logo from '../assets/logo/IITM_LOGO.png';
 
 // --- Structured Navigation Data Configuration ---
@@ -65,118 +64,43 @@ const NAVIGATION_DATA = [
   }
 ];
 
-// --- Sub-Components ---
-
-const checkIsActiveRoute = (navItem, currentPath) => {
-  if (navItem.path && currentPath.startsWith(navItem.path)) return true;
-  if (navItem.groups) return navItem.groups.some(group => group.links.some(link => currentPath.startsWith(link.to)));
-  return false;
-};
-
-const NavButton = ({ title, isActive, isCurrentPage }) => {
-  const isVisuallyActive = isActive || isCurrentPage;
-  return (
-    <button
-      className={`relative inline-flex items-center font-medium text-[14px] h-full px-4 border-none bg-transparent cursor-pointer transition-colors duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 focus-visible:ring-inset rounded-md ${isVisuallyActive ? 'text-orange-700' : 'text-[#4b5563] hover:text-orange-700'}`}
-      aria-expanded={isActive} aria-haspopup="menu"
-    >
-      {title} <ChevronDown size={14} className={`ml-1.5 transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${isActive ? 'rotate-180 text-orange-700' : 'text-[#9ca3af]'}`} />
-      <span className={`absolute bottom-0 left-2 right-2 h-[2px] bg-orange-700 transition-transform duration-300 origin-center rounded-t-sm shadow-[0_-1px_4px_rgba(194,65,12,0.3)] ${isVisuallyActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`} aria-hidden="true" />
-    </button>
-  );
-};
-
-const MegaMenu = ({ navItem, isActive, isScrolled, currentPath }) => {
-  return (
-    <div className={`absolute left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-3xl border border-white/40 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.15)] rounded-b-2xl transition-all duration-300 origin-top z-50 overflow-hidden w-max max-w-[95vw] ${isScrolled ? 'top-[64px]' : 'top-[80px]'} ${isActive ? 'opacity-100 visible scale-y-100 translate-y-0' : 'opacity-0 invisible scale-y-95 pointer-events-none -translate-y-2'}`} role="menu">
-      <div className="flex flex-wrap gap-x-12 gap-y-10 py-10 px-12 bg-white/50">
-        {navItem.groups.map((group, groupIndex) => (
-          <div key={groupIndex} className="flex-1 min-w-[200px] flex flex-col gap-3">
-            {group.heading && <div className="text-[11px] font-bold text-[#9ca3af] uppercase tracking-wider mb-1">{group.heading}</div>}
-            <ul className="flex flex-col gap-1 m-0 p-0 list-none">
-              {group.links.map((link, linkIndex) => (
-                <li key={linkIndex}>
-                  <Link to={link.to} className={`block px-3 py-2 -mx-3 rounded-lg text-[14px] font-medium transition-all duration-200 hover:translate-x-1 whitespace-normal break-words leading-snug focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 ${currentPath === link.to ? 'bg-orange-50 text-orange-800 font-semibold' : 'text-[#4b5563] hover:bg-orange-50 hover:text-orange-800'}`} role="menuitem">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-      {navItem.path && (
-        <div className="bg-gradient-to-r from-orange-50/80 to-transparent border-t border-orange-100/50 px-10 py-4 flex justify-end">
-          <Link to={navItem.path} className="text-[13px] font-semibold text-orange-700 hover:text-orange-900 transition-colors flex items-center gap-1 group focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-orange-600 rounded-sm">
-            Go to {navItem.title} Overview <span className="transition-transform duration-300 group-hover:translate-x-1.5" aria-hidden="true">&rarr;</span>
-          </Link>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const MobileAccordion = ({ navItem, isOpen, toggleMobileAccordion, currentPath, closeMenu }) => {
-  const isCurrentPage = checkIsActiveRoute(navItem, currentPath);
-
-  return (
-    <div className="border-b border-slate-100">
-      <button onClick={() => toggleMobileAccordion(navItem.title)} className={`w-full flex items-center justify-between py-4 px-6 text-left font-semibold focus:outline-none transition-colors ${isOpen || isCurrentPage ? 'text-orange-700' : 'text-[#1f2937]'}`}>
-        {navItem.title}
-        {isOpen ? <Minus size={18} className="text-orange-700" /> : <Plus size={18} className="text-[#4b5563]" />}
-      </button>
-
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }} className="overflow-hidden bg-slate-50/50">
-            <div className="px-6 space-y-6 pb-6 pt-2">
-              {navItem.path && (
-                <Link to={navItem.path} onClick={closeMenu} className="block text-orange-700 font-semibold text-sm">
-                  {navItem.title} Overview &rarr;
-                </Link>
-              )}
-              {navItem.groups.map((group, index) => (
-                <div key={index} className="space-y-3">
-                  {group.heading && <div className="text-[11px] font-bold text-[#6b7280] uppercase tracking-wider pb-1">{group.heading}</div>}
-                  <ul className="space-y-3">
-                    {group.links.map((link, linkIndex) => (
-                      <li key={linkIndex}>
-                        <Link to={link.to} onClick={closeMenu} className={`block text-sm transition-colors leading-relaxed ${currentPath === link.to ? 'text-orange-700 font-medium' : 'text-[#4b5563] hover:text-orange-700'}`}>
-                          {link.label}9
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-};
-
-// --- Main Component ---
-
 const Navigation = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openMobileAccordion, setOpenMobileAccordion] = useState(null);
-  const [isScrolled, setIsScrolled] = useState(false);
   const timeoutRef = useRef(null);
-  const location = useLocation();
+  const [isScrolled, setIsScrolled] = useState(false);
+  
+  const token = localStorage.getItem('token');
+  const role = localStorage.getItem('userRole');
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const getDashboardLink = () => {
+    if (role === 'admin') return '/admin';
+    if (role === 'faculty') return '/faculty-dashboard';
+    if (role === 'student') return '/student-dashboard';
+    return '/login'; 
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userRole');
+    navigate('/');
+    window.location.reload(); 
+  };
+
   useEffect(() => {
-    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [isMobileMenuOpen]);
+    setIsMobileMenuOpen(false);
+    setActiveDropdown(null);
+    setOpenMobileAccordion(null);
+  }, [location]);
 
   const handleMouseEnter = (menu) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -184,17 +108,49 @@ const Navigation = () => {
   };
 
   const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => setActiveDropdown(null), 150);
+    timeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 150); 
   };
 
-  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  // --- Mobile Accordion Component ---
+  const MobileAccordion = ({ navItem }) => {
+    const isOpen = openMobileAccordion === navItem.title;
+    return (
+      <div className="border-b border-[#e5e7eb]">
+        <button onClick={() => setOpenMobileAccordion(isOpen ? null : navItem.title)} className="w-full flex items-center justify-between py-4 px-6 text-left text-[#1f2937] font-semibold focus:outline-none">
+          {navItem.title}
+          {isOpen ? <Minus size={18} className="text-[#4b5563]" /> : <Plus size={18} className="text-[#4b5563]" />}
+        </button>
+        <div className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+           <div className="overflow-hidden">
+             <div className="px-6 space-y-6 pb-5 pt-1">
+               {navItem.path && <Link to={navItem.path} className="block text-[#b45309] font-semibold text-sm">{navItem.title} Overview &rarr;</Link>}
+               {navItem.groups.map((group, index) => (
+                  <div key={index} className="space-y-3">
+                    {group.heading && <div className="text-xs font-bold text-[#4b5563] uppercase tracking-wider pb-1">{group.heading}</div>}
+                    <ul className="space-y-4">
+                      {group.links.map((link, linkIndex) => (
+                        <li key={linkIndex}><Link to={link.to} className="block text-[#4b5563] text-sm hover:text-[#b45309] transition-colors">{link.label}</Link></li>
+                      ))}
+                    </ul>
+                  </div>
+               ))}
+             </div>
+           </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <nav className={`fixed w-full top-0 z-[1000] transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.06)] border-transparent' : 'bg-white/80 backdrop-blur-sm border-b border-black/5'}`}>
-
+    // HARDCODED Z-INDEX to violently override any dashboard tables underneath it
+    <nav style={{ zIndex: 99999 }} className={`fixed w-full top-0 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.06)] border-transparent' : 'bg-white/90 backdrop-blur-sm border-b border-black/5'}`}>
       <div className="container mx-auto px-6 max-w-7xl">
         <div className={`flex items-center justify-between transition-all duration-300 ${isScrolled ? 'h-16' : 'h-20'}`}>
-          <Link to="/" className="flex items-center gap-4 group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-600 rounded-lg">
+          
+          {/* Logo Section */}
+          <Link to="/" className="flex items-center gap-4 group focus:outline-none">
             <img src={logo} alt="IIT Madras Chemistry Department" className={`w-auto object-contain transition-all duration-300 ${isScrolled ? 'h-[42px]' : 'h-[52px]'}`} />
             <div className="flex-col justify-center hidden sm:flex">
               <span className="text-[17px] font-bold text-[#1f2937] group-hover:text-orange-700 transition-colors leading-tight tracking-tight">Department of Chemistry</span>
@@ -202,70 +158,111 @@ const Navigation = () => {
             </div>
           </Link>
 
-          <button
-            type="button"
-            className="lg:hidden p-2 text-[#4b5563] hover:text-orange-700 hover:bg-orange-50 rounded-lg transition-colors focus:outline-none"
-            onClick={() => setIsMobileMenuOpen(true)}
-            aria-label="Open primary menu"
-          >
+          {/* Mobile Hamburger */}
+          <button type="button" className="lg:hidden p-2 text-[#4b5563] hover:text-orange-700" onClick={() => setIsMobileMenuOpen(true)}>
             <Menu size={28} />
           </button>
 
-          <div className="hidden lg:flex lg:items-center h-full relative">
-            <div className="flex items-center gap-1 h-full">
-              <Link to="/" className={`inline-flex items-center justify-center h-10 w-10 mx-1 rounded-lg transition-colors duration-150 focus:outline-none ${location.pathname === '/' ? 'text-orange-700 bg-orange-50' : 'text-[#4b5563] hover:text-orange-700 hover:bg-orange-50'}`}>
-                <HomeIcon size={20} />
-              </Link>
-              {NAVIGATION_DATA.map((navItem) => (
-                <div key={navItem.title} className="h-full static group" onMouseEnter={() => handleMouseEnter(navItem.title)} onMouseLeave={handleMouseLeave}>
-                  <NavButton title={navItem.title} isActive={activeDropdown === navItem.title} isCurrentPage={checkIsActiveRoute(navItem, location.pathname)} />
-                  <MegaMenu navItem={navItem} isActive={activeDropdown === navItem.title} isScrolled={isScrolled} currentPath={location.pathname} />
+          {/* Desktop Links & Auth Container */}
+          <div className="hidden xl:flex xl:items-center h-full">
+            <Link to="/" className="inline-flex items-center justify-center h-full px-3 text-[#4b5563] hover:text-[#b45309] transition-colors">
+              <HomeIcon size={20} />
+            </Link>
+
+            {/* Loop through JSON to build Nav */}
+            {NAVIGATION_DATA.map((navItem, index) => {
+              const isActive = activeDropdown === navItem.title;
+              // Smart alignment: Push the last 2 menus to the left so they don't fall off the screen!
+              const isRightAligned = index >= NAVIGATION_DATA.length - 2;
+
+              return (
+                <div key={navItem.title} className="h-full relative group flex items-center" onMouseEnter={() => handleMouseEnter(navItem.title)} onMouseLeave={handleMouseLeave}>
+                  
+                  {/* The Button */}
+                  <button className={`relative h-full px-4 flex items-center font-medium text-[15px] transition-colors duration-150 ${isActive ? 'text-[#b45309]' : 'text-[#1f2937] hover:text-[#b45309]'}`}>
+                    {navItem.title}
+                    <ChevronDown size={14} className={`ml-1.5 transition-transform duration-200 ${isActive ? 'rotate-180 text-[#b45309]' : 'text-[#4b5563]'}`} />
+                    {/* Fixed Orange Border: Now properly constrained to just the button! */}
+                    {isActive && <span className="absolute bottom-0 left-0 w-full h-[3px] bg-[#b45309]" aria-hidden="true" />}
+                  </button>
+
+                  {/* The Dropdown Menu */}
+                  <div className={`absolute top-full ${isRightAligned ? 'right-0' : 'left-1/2 -translate-x-1/2'} bg-white border border-[#e5e7eb] shadow-2xl rounded-b-md transition-all duration-200 origin-top overflow-hidden w-max max-w-[calc(100vw-2rem)] ${isActive ? 'opacity-100 visible scale-y-100 translate-y-0' : 'opacity-0 invisible scale-y-95 pointer-events-none -translate-y-2'}`} style={{ zIndex: 100000 }}>
+                    <div className="flex p-8 gap-10">
+                      {navItem.groups.map((group, groupIndex) => (
+                        <div key={groupIndex} className="flex flex-col gap-3 min-w-[150px]">
+                          {group.heading && <div className="text-xs font-bold text-[#4b5563] uppercase tracking-wider mb-1">{group.heading}</div>}
+                          <ul className="flex flex-col gap-2 m-0 p-0 list-none">
+                            {group.links.map((link, linkIndex) => (
+                              <li key={linkIndex}>
+                                <Link to={link.to} className="block text-[#4b5563] text-[15px] hover:text-[#b45309] transition-colors py-1">{link.label}</Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                    {navItem.path && (
+                       <div className="bg-[#f5f6f8] border-t border-[#e5e7eb] px-8 py-4 flex justify-end">
+                         <Link to={navItem.path} className="text-[14px] font-semibold text-[#1f2937] hover:text-[#b45309] transition-colors flex items-center gap-1">
+                           Go to {navItem.title} Overview <span aria-hidden="true">&rarr;</span>
+                         </Link>
+                       </div>
+                    )}
+                  </div>
                 </div>
-              ))}
+              );
+            })}
+
+            {/* Desktop Auth Section */}
+            <div className="flex items-center gap-4 ml-4 pl-4 border-l border-gray-300 h-8">
+              {token ? (
+                <>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-gray-500 bg-gray-100 px-2.5 py-1 rounded">{role}</span>
+                  <Link to={getDashboardLink()} className="font-semibold text-sm text-[#b45309] hover:text-[#92400e] transition-colors whitespace-nowrap">
+                    My Dashboard
+                  </Link>
+                  <button onClick={handleLogout} className="bg-red-600 hover:bg-red-700 text-white px-3.5 py-1.5 rounded-sm text-sm font-bold transition-colors">
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <Link to="/login" className="bg-[#1f2937] hover:bg-black text-white px-4 py-2 rounded-sm text-sm font-bold transition-colors shadow-sm whitespace-nowrap">
+                  Portal Login
+                </Link>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* --- Mobile Menu Drawer --- */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div key="mobile-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[2000] lg:hidden" onClick={closeMobileMenu} />
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            key="mobile-drawer"
-            initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl flex flex-col h-[100dvh] z-[2001] lg:hidden border-l border-slate-200"
-          >
-            <div className="flex-none flex items-center justify-between px-6 py-5 border-b border-slate-100 bg-white">
-              <span className="text-orange-700 font-bold uppercase tracking-widest text-[11px]">Menu</span>
-              <button onClick={closeMobileMenu} className="text-[#4b5563] hover:text-orange-700 hover:bg-orange-50 rounded-lg p-1 transition-all duration-300 hover:rotate-90 focus:outline-none">
-                <X size={24} strokeWidth={1.5} />
-              </button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto w-full bg-white pb-8">
-              <Link to="/" onClick={closeMobileMenu} className={`block font-semibold py-4 px-6 border-b border-slate-100 transition-colors ${location.pathname === '/' ? 'text-orange-700 bg-orange-50/50' : 'text-[#1f2937] hover:text-orange-700 hover:bg-orange-50'}`}>
-                Home
-              </Link>
-              {NAVIGATION_DATA.map((navItem) => (
-                <MobileAccordion
-                  key={navItem.title}
-                  navItem={navItem}
-                  isOpen={openMobileAccordion === navItem.title}
-                  toggleMobileAccordion={(title) => setOpenMobileAccordion(openMobileAccordion === title ? null : title)}
-                  currentPath={location.pathname}
-                  closeMenu={closeMobileMenu}
-                />
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Mobile Drawer (Hidden on Desktop) */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-[100000] xl:hidden">
+           <div className="fixed inset-0 bg-black/40" onClick={() => setIsMobileMenuOpen(false)}></div>
+           <div className="fixed inset-y-0 right-0 w-[85%] max-w-sm bg-[#f5f6f8] shadow-2xl flex flex-col h-full overflow-hidden">
+             <div className="flex items-center justify-between px-6 py-5 border-b border-[#e5e7eb] bg-white">
+               <span className="text-[#1f2937] font-bold uppercase tracking-widest text-sm">Menu</span>
+               <button onClick={() => setIsMobileMenuOpen(false)} className="text-[#4b5563] hover:text-[#1f2937] p-1"><X size={24} /></button>
+             </div>
+             <div className="flex-1 overflow-y-auto w-full bg-white flex flex-col">
+               <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="block text-[#1f2937] font-semibold py-4 px-6 border-b border-[#e5e7eb]">Home</Link>
+               {NAVIGATION_DATA.map((navItem) => <MobileAccordion key={navItem.title} navItem={navItem} />)}
+               <div className="p-6 mt-auto bg-gray-50 border-t border-gray-200">
+                  {token ? (
+                    <div className="flex flex-col gap-3">
+                      <span className="text-xs font-bold uppercase tracking-wider text-gray-500">Logged in as: {role}</span>
+                      <Link to={getDashboardLink()} onClick={() => setIsMobileMenuOpen(false)} className="block text-center bg-[#1f2937] text-white font-bold py-3 rounded-sm">Go to My Dashboard</Link>
+                      <button onClick={handleLogout} className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-sm">Logout</button>
+                    </div>
+                  ) : (
+                    <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="block w-full bg-[#1f2937] text-white text-center font-bold py-3 rounded-sm">Portal Login</Link>
+                  )}
+               </div>
+             </div>
+           </div>
+        </div>
+      )}
     </nav>
   );
 };

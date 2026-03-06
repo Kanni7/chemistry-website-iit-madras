@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionTemplate } from 'framer-motion';
-import { BookOpen, FlaskConical, Users, Globe, ArrowRight, Megaphone, Layers } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button';
+import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionTemplate } from 'framer-motion';
+import { BookOpen, FlaskConical, Users, Globe, ArrowRight, Megaphone, Layers, Bell } from 'lucide-react';
+import { InteractiveHoverButton } from '../components/ui/interactive-hover-button';
 
 // --- Shared Animation Variants ---
 const slowReveal = {
@@ -22,9 +22,9 @@ const mechanicalReveal = {
 
 // --- Images for the Auto-Slider ---
 const HERO_IMAGES = [
+  "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1920&q=80",
   "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1920&q=80",
-  "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1920&q=80"
+  "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1920&q=80"
 ];
 
 // --- Data for Announcements ---
@@ -39,7 +39,6 @@ const ANNOUNCEMENTS = [
 
 // --- Interactive Spotlight Card for Core Domains ---
 const DomainCard = ({ icon: Icon, title, description, linkText, linkTo, useHoverButton = false }) => {
-  const divRef = useRef(null);
   const navigate = useNavigate();
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -56,7 +55,6 @@ const DomainCard = ({ icon: Icon, title, description, linkText, linkTo, useHover
       onMouseMove={handleMouseMove}
       className="group/card cursor-default bg-white/80 backdrop-blur-2xl p-8 border border-slate-200/60 shadow-xl shadow-slate-200/60 transition-all duration-300 flex flex-col h-full rounded-3xl relative overflow-hidden hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(180,83,9,0.15)] hover:border-orange-200"
     >
-      {/* Spotlight Hover Glow */}
       <motion.div
         className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition-opacity duration-300 group-hover/card:opacity-100 z-0"
         style={{
@@ -69,15 +67,12 @@ const DomainCard = ({ icon: Icon, title, description, linkText, linkTo, useHover
           `,
         }}
       />
-
-      {/* Card Content */}
       <div className="relative z-10 flex flex-col h-full">
         <div className="mb-5 inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-slate-50 text-slate-400 group-hover/card:bg-orange-50 group-hover/card:text-[#b45309] transition-all duration-300 group-hover/card:scale-110 origin-left border border-slate-100 group-hover/card:border-orange-100 shadow-sm">
           <Icon size={26} strokeWidth={1.5} />
         </div>
         <h3 className="text-xl font-bold text-[#1f2937] mb-3">{title}</h3>
         <p className="text-[15px] text-[#4b5563] leading-relaxed font-medium mb-8">{description}</p>
-
         {useHoverButton ? (
           <div className="mt-auto">
             <InteractiveHoverButton
@@ -99,14 +94,27 @@ const DomainCard = ({ icon: Icon, title, description, linkText, linkTo, useHover
 // --- Main Page Component ---
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [notices, setNotices] = useState([]);
+  
+  // Setup Security & Identity
+  const [userRole, setUserRole] = useState(localStorage.getItem('userRole'));
+  const canPostNotice = userRole === 'admin' || userRole === 'faculty' || userRole === 'lab_manager';
+
+  // Animation Hooks
   const { scrollYProgress } = useScroll();
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-
-  const rotateReverse = useTransform(smoothProgress, [0, 1], [0, -180]);
   const rotateSlow = useTransform(smoothProgress, [0, 1], [0, 90]);
   const panUpSlow = useTransform(smoothProgress, [0, 1], ['0%', '-20%']);
-  const drawPath = useTransform(smoothProgress, [0, 1], [0, 1]);
 
+  // Fetch Live Database Notices
+  useEffect(() => {
+    fetch('http://127.0.0.1:8000/api/notices')
+      .then(response => response.json())
+      .then(data => setNotices(data))
+      .catch(error => console.error("Error fetching notices:", error));
+  }, []);
+
+  // Image Slider Timer
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % HERO_IMAGES.length);
@@ -123,14 +131,11 @@ const Home = () => {
       <div className="fixed inset-0 z-[0] pointer-events-none">
         <div className="absolute inset-0 opacity-[0.25] bg-[radial-gradient(#94a3b8_1px,transparent_1px)] [background-size:24px_24px]"></div>
       </div>
-
-      {/* Soft Ambient Glows */}
       <div className="fixed inset-0 z-[0] pointer-events-none overflow-hidden">
         <div className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#b45309]/[0.06] rounded-full blur-[120px]"></div>
         <div className="absolute top-[40%] right-[-10%] w-[40vw] h-[40vw] bg-blue-600/[0.04] rounded-full blur-[140px]"></div>
       </div>
 
-      {/* Large Background Chemistry Hexagons */}
       <motion.div style={{ y: panUpSlow, rotate: rotateSlow }} className="fixed top-[10%] left-[-5%] z-[1] opacity-[0.05] pointer-events-none">
         <svg width="400" height="400" viewBox="0 0 100 100" stroke="#0f172a" fill="none" strokeWidth="0.5">
           <polygon points="50,5 93,30 93,80 50,105 7,80 7,30" />
@@ -161,7 +166,6 @@ const Home = () => {
             </motion.p>
 
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8, duration: 1.2 }} className="flex flex-col sm:flex-row gap-4">
-              {/* Animated Primary Button */}
               <Link to="/about/overview" className="group relative inline-flex items-center justify-center px-8 py-4 bg-[#1f2937] text-white font-semibold rounded-xl border border-[#1f2937] shadow-lg shadow-slate-300/50 hover:bg-white hover:text-[#b45309] hover:border-[#b45309] hover:shadow-[0_8px_20px_rgba(180,83,9,0.15)] transition-all duration-300 overflow-hidden text-[15px] min-w-[180px]">
                 <div className="flex items-center transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:-translate-x-3">
                   <div className="w-2 h-2 rounded-full bg-white mr-3 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:opacity-0 group-hover:scale-0 group-hover:-translate-x-3" />
@@ -171,8 +175,6 @@ const Home = () => {
                   <ArrowRight size={18} />
                 </div>
               </Link>
-
-              {/* Animated Secondary Button */}
               <Link to="/academics" className="group relative inline-flex items-center justify-center px-8 py-4 bg-white/90 backdrop-blur-xl border border-slate-200 text-[#1f2937] font-semibold rounded-xl shadow-lg shadow-slate-200/50 hover:bg-[#1f2937] hover:border-[#1f2937] hover:text-white hover:shadow-[0_8px_20px_rgba(31,41,55,0.15)] transition-all duration-300 overflow-hidden text-[15px] min-w-[200px]">
                 <div className="flex items-center transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:-translate-x-3">
                   <div className="w-2 h-2 rounded-full bg-[#b45309] mr-3 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:opacity-0 group-hover:scale-0 group-hover:-translate-x-3" />
@@ -186,12 +188,7 @@ const Home = () => {
           </div>
 
           {/* Glass Image Slider */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.4, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-5 relative w-full aspect-[4/5] lg:aspect-[3/4] max-w-md mx-auto lg:ml-auto"
-          >
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4, duration: 1.2, ease: [0.16, 1, 0.3, 1] }} className="lg:col-span-5 relative w-full aspect-[4/5] lg:aspect-[3/4] max-w-md mx-auto lg:ml-auto">
             <div className="absolute inset-0 bg-white/40 backdrop-blur-2xl border border-white/60 shadow-2xl shadow-slate-300/40 rounded-3xl overflow-hidden p-2 flex flex-col pointer-events-none">
               <div className="flex-1 w-full rounded-2xl overflow-hidden relative isolate">
                 {HERO_IMAGES.map((img, idx) => (
@@ -219,21 +216,99 @@ const Home = () => {
           </motion.div>
         </header>
 
+        {/* --- LIVE DATABASE NOTICE BOARD (Added by Rajdeep) --- */}
+        <section className="mb-20 w-full bg-white/80 backdrop-blur-xl border border-slate-200/80 shadow-xl shadow-slate-200/50 rounded-3xl p-8 lg:p-10">
+          <div className="flex items-center gap-3 mb-8">
+            <Bell className="text-[#b45309]" size={28} />
+            <div>
+              <h2 className="text-3xl font-bold text-[#1f2937] tracking-tight">Live Department Notices</h2>
+              <div className="w-16 h-[3px] bg-[#b45309] mt-2 rounded-full"></div>
+            </div>
+          </div>
+          
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* LEFT SIDE: The Notices List */}
+            <div className={`${canPostNotice ? 'lg:w-2/3' : 'w-full'} grid grid-cols-1 md:grid-cols-2 gap-6 h-fit`}>
+              {notices.length > 0 ? (
+                notices.map((notice) => (
+                  <div key={notice.id} className="bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-orange-200 hover:shadow-lg transition-all">
+                    <h3 className="text-lg font-bold text-[#1f2937] mb-2">{notice.title}</h3>
+                    <p className="text-[#4b5563] mb-4 leading-relaxed text-sm line-clamp-3">{notice.content}</p>
+                    <div className="flex justify-between items-center mt-auto pt-4 border-t border-slate-200">
+                      <span className="text-xs font-bold text-[#b45309] bg-orange-50 px-2 py-1 rounded-md">{notice.author}</span>
+                      <span className="text-xs text-slate-400 font-medium">{notice.date.split(' ')[0]}</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-2 text-center py-12 text-slate-500 italic bg-slate-50 border border-dashed border-slate-300 rounded-2xl">
+                  No active database notices at this time.
+                </div>
+              )}
+            </div>
+
+            {/* RIGHT SIDE: The Submission Form (ONLY SHOWS FOR ADMIN/FACULTY) */}
+            {canPostNotice && (
+              <div className="lg:w-1/3 bg-white p-6 border border-slate-200 shadow-md rounded-2xl h-fit">
+                <h3 className="text-lg font-bold text-[#1f2937] mb-5 flex items-center gap-2">
+                  <Megaphone size={18} className="text-[#b45309]" /> Post a Notice
+                </h3>
+                <form 
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.target);
+                    const newNotice = { title: formData.get('title'), content: formData.get('content'), deadline: formData.get('deadline') };
+                    const token = localStorage.getItem('token');
+                    try {
+                      const res = await fetch('http://127.0.0.1:8000/api/notices', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                        body: JSON.stringify(newNotice)
+                      });
+                      if (res.ok) {
+                        const data = await res.json();
+                        setNotices([data, ...notices]); 
+                        e.target.reset(); 
+                        alert("✅ Notice published securely to database!");
+                      } else {
+                        const errorData = await res.json();
+                        alert(`❌ Server says: ${errorData.msg || errorData.error}`);
+                      }
+                    } catch (err) { console.error("Failed to post notice:", err); }
+                  }}
+                  className="flex flex-col gap-4"
+                >
+                  <div>
+                    <input name="title" required type="text" className="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-[#b45309] text-sm" placeholder="Notice Title" />
+                  </div>
+                  <div>
+                    <input name="deadline" type="date" className="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-[#b45309] text-sm text-slate-500" />
+                  </div>
+                  <div>
+                    <textarea name="content" required rows="3" className="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-[#b45309] text-sm" placeholder="Details..."></textarea>
+                  </div>
+                  <button type="submit" className="w-full bg-[#1f2937] hover:bg-[#b45309] text-white font-bold py-2.5 rounded-xl transition-colors text-sm">
+                    Publish to Portal
+                  </button>
+                </form>
+              </div>
+            )}
+          </div>
+        </section>
+
         {/* --- HIGHLY POLISHED SEPARABLE LAYOUT --- */}
         <div className="relative">
           <motion.section variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }}>
-
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-0 lg:divide-x lg:divide-slate-200/80 border-t lg:border-t-0 lg:border-l border-slate-200/80">
 
-              {/* === LEFT: UPDATES WIDGET (4 Columns) === */}
+              {/* === LEFT: STATIC ANNOUNCEMENTS (4 Columns) === */}
               <div className="lg:col-span-4 flex flex-col lg:pr-12">
                 <motion.h2 variants={slowReveal} className="text-2xl font-black mb-8 flex items-center gap-4 text-[#1f2937] uppercase tracking-tight relative">
                   <span className="bg-[#b45309] text-white px-5 py-2.5 text-[15px] rounded-xl shadow-[0_8px_20px_rgba(180,83,9,0.3)] flex items-center gap-2">
-                    <Megaphone size={18} /> Latest Updates
+                    <Megaphone size={18} /> Latest News
                   </span>
                 </motion.h2>
 
-                {/* ENHANCED SHADOW: Deep shadow-2xl behind the unified updates panel */}
                 <motion.div variants={slowReveal} className="bg-white/80 backdrop-blur-2xl border border-slate-200/80 rounded-[2rem] p-3 shadow-2xl shadow-slate-200/60 flex flex-col">
                   {ANNOUNCEMENTS.map((announcement, idx) => (
                     <Link to={announcement.link} key={announcement.id} className={`group block p-5 rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] border border-transparent hover:border-orange-200/50 ${idx !== ANNOUNCEMENTS.length - 1 ? 'mb-1' : ''}`}>
@@ -249,17 +324,16 @@ const Home = () => {
                       </div>
                     </Link>
                   ))}
-
                   <div className="px-5 pt-4 pb-2 border-t border-slate-200/60 mt-2">
                     <Link to="/announcements" className="text-[#1f2937] font-bold text-sm flex items-center gap-2 hover:text-[#b45309] transition-colors group w-max border-b-2 border-transparent hover:border-[#b45309] pb-1">
-                      View All Announcements <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                      View All News <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </div>
                 </motion.div>
               </div>
 
               {/* === RIGHT: CORE DOMAINS (8 Columns) === */}
-              <div className="lg:col-span-8 flex flex-col lg:pl-12">
+              <div className="lg:col-span-8 flex flex-col lg:pl-12 mt-12 lg:mt-0">
                 <motion.h2 variants={slowReveal} className="text-2xl font-black mb-8 flex items-center gap-4 text-[#1f2937] uppercase tracking-tight relative">
                   <span className="bg-[#1f2937] text-white px-5 py-2.5 text-[15px] rounded-xl shadow-[0_8px_20px_rgba(31,41,55,0.25)] flex items-center gap-2">
                     <Layers size={18} /> Core Domains
@@ -267,7 +341,6 @@ const Home = () => {
                   <span className="h-[1px] bg-slate-200 flex-grow ml-2 hidden sm:block"></span>
                 </motion.h2>
 
-                {/* Interactive Spotlight Card Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 h-full">
                   <DomainCard
                     icon={BookOpen}
@@ -306,7 +379,6 @@ const Home = () => {
 
             </div>
           </motion.section>
-
         </div>
       </div>
     </div>
